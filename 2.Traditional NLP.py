@@ -8,4 +8,4 @@ print([str(token) for token in nlp(text.lower())])
 tweet=u"Snow White and the Seven Degrees#MakeAMovieCold@midnight:-)" 
 tokenizer = TweetTokenizer() 
 print(tokenizer.tokenize(tweet.lower()))
-# %%
+#%%
