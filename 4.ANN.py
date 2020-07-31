@@ -91,7 +91,35 @@ print(cat_szs)
 emb_szs = [(size, min(50, (size+1)//2)) for size in cat_szs]
 emb_szs
 
+'''Tabular Model'''
 
+# This is our source data
+catz = cats[:4]
+print(catz)
+
+# This is passed in when the model is instantiated
+print(emb_szs)
+print([nn.Embedding(ni,nf) for ni,nf in emb_szs])
+
+# This is assigned inside the __init__() method
+selfembeds = nn.ModuleList([nn.Embedding(ni,nf) for ni,nf in emb_szs])
+print(selfembeds)
+print(list(enumerate(selfembeds)))
+
+# This happens inside the forward() method
+embeddingz = []
+for i,e in enumerate(selfembeds):
+    embeddingz.append(e(catz[:,i]))
+print(embeddingz)
+
+# We concatenate the embedding sections (12,1,4) into one (17)
+z = torch.cat(embeddingz, 1)
+print(z)
+
+# This was assigned under the __init__() method
+selfembdrop = nn.Dropout(.4)
+z = selfembdrop(z)
+print(z)
 
 
 
