@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import pandas as pd 
 
+
 df = pd.read_csv('data/NYCTaxiFare.csv')
 print(df.head)
 print(df['fare_amount'].describe())
@@ -70,8 +71,18 @@ print(cats[:5])
 # OR->
 # cats = np.stack([df[col].cat.codes.values for col in cat_cols], 1)
 
-
-
+# Convert numpy arrays to tensors
+cats = torch.tensor(cats, dtype=torch.int64)
+cats[:5]
+conts = np.stack([df[col].values for col in cont_cols], 1)
+conts = torch.tensor(conts, dtype=torch.float)
+conts[:5]
+conts.type()
+y = torch.tensor(df[y_col].values, dtype=torch.float).reshape(-1,1) #reshape to make sure to keep column shape instead of flattened array
+y[:5]
+print(cats.shape)
+print(conts.shape)
+print(y.shape)
 
 
 
