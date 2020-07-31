@@ -73,7 +73,7 @@ def visualize_results(perceptron, x_data, y_truth, n_samples=1000, ax=None, epoc
         _, ax = plt.subplots(1, 1, figsize=(10,10))
         
     for x_list, color_list, marker in zip(all_x, all_colors, markers):
-        ax.scatter(x_list[:, 0], x_list[:, 1], edgecolor="red", marker=marker, facecolor=color_list, s=300)
+        ax.scatter(x_list[:, 0], x_list[:, 1], edgecolor="white", marker=marker, facecolor=color_list, s=300)
     
         
     xlim = (min([x_list[:,0].min() for x_list in all_x]), 
@@ -134,5 +134,57 @@ ax.scatter(left_x[:, 0], left_x[:, 1], color=left_colors, marker='*', s=100)
 ax.scatter(right_x[:, 0], right_x[:, 1], facecolor='white', edgecolor=right_colors, marker='o', s=100)
 
 plt.axis('off');
+
+# %%
+#training
+lr = 0.01
+input_dim = 2
+batch_size = 1000
+n_epochs = 12
+n_batches = 5
+seed = 1337
+torch.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
+np.random.seed(seed)
+
+perceptron = Perceptron(input_dim=input_dim)
+optimizer = optim.Adam(params=perceptron.parameters(), lr=lr)
+bce_loss = nn.BCELoss()
+
+losses = []
+x_data_static, y_truth_static = get_toy_data(batch_size)
+fig, ax = plt.subplots(1, 1, figsize=(10,5))
+visualize_results(perceptron, x_data_static, y_truth_static, ax=ax, title='Initial Model State')
+plt.axis('off')
+
+change = 1.0
+last = 10.0
+epsilon = 1e-3
+epoch = 0
+
+while change > epsilon or epoch < n_epochs or last > 0.3:
+#for epoch in range(n_epochs):
+    for _ in range(n_batches):
+
+        optimizer.zero_grad()
+        x_data, y_target = get_toy_data(batch_size)
+        y_pred = perceptron(x_data).squeeze()
+        loss = bce_loss(y_pred, y_target)
+        loss.backward()
+        optimizer.step()
+        
+        
+        loss_value = loss.item()
+        losses.append(loss_value)
+
+        change = abs(last - loss_value)
+        last = loss_value
+               
+    fig, ax = plt.subplots(1, 1, figsize=(10,5))
+    visualize_results(perceptron, x_data_static, y_truth_static, ax=ax, epoch=epoch, 
+                      title=f"{loss_value}; {change}")
+    plt.axis('off')
+    epoch += 1
+
 
 # %%
