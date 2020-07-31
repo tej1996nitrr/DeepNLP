@@ -95,10 +95,44 @@ def visualize_results(perceptron, x_data, y_truth, n_samples=1000, ax=None, epoc
         plt.text(xlim[0], ylim[1], "Epoch = {}".format(str(epoch)))
 
 
+# %%
+#Initial Data Plot
 
+seed = 1337
 
+torch.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
+np.random.seed(seed)
 
+x_data, y_truth = get_toy_data(batch_size=1000)
 
+x_data = x_data.data.numpy()
+y_truth = y_truth.data.numpy()
 
+left_x = []
+right_x = []
+left_colors = []
+right_colors =  []
 
+for x_i, y_true_i in zip(x_data, y_truth):
+    color = 'black'
 
+    if y_true_i == 0:
+        left_x.append(x_i)
+        left_colors.append(color)
+
+    else:
+        right_x.append(x_i)
+        right_colors.append(color)
+
+left_x = np.stack(left_x)
+right_x = np.stack(right_x)
+
+_, ax = plt.subplots(1, 1, figsize=(10,4))
+
+ax.scatter(left_x[:, 0], left_x[:, 1], color=left_colors, marker='*', s=100)
+ax.scatter(right_x[:, 0], right_x[:, 1], facecolor='white', edgecolor=right_colors, marker='o', s=100)
+
+plt.axis('off');
+
+# %%
