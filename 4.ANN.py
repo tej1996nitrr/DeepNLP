@@ -41,6 +41,53 @@ print(df['EDTdate'].min())
 print(df['EDTdate'].max())
 print(df.columns)
 
+# Separate categorical from continuous columns
+cat_cols = ['Hour', 'AMorPM', 'Weekday']
+cont_cols = ['pickup_latitude', 'pickup_longitude', 'dropoff_latitude', 'dropoff_longitude', 'passenger_count', 'dist_km']
+y_col = ['fare_amount'] #label
+
+# Convert our three categorical columns to category dtypes.
+for cat in cat_cols:
+    df[cat] = df[cat].astype('category')
+print(df.dtypes)
+print(df.head())
+print(df['Hour'].head())
+print(df['AMorPM'].head())
+print(df['AMorPM'].cat.categories)
+print(df['AMorPM'].head().cat.codes)
+print(df['Weekday'].cat.categories)
+print(df['Weekday'].head().cat.codes)
+
+# combine the three categorical columns into one input array using numpy.stack
+
+hr = df['Hour'].cat.codes.values
+ampm = df['AMorPM'].cat.codes.values
+wkdy = df['Weekday'].cat.codes.values
+
+cats = np.stack([hr, ampm, wkdy], 1)
+
+print(cats[:5])
+# OR->
+# cats = np.stack([df[col].cat.codes.values for col in cat_cols], 1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
