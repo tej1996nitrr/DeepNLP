@@ -84,8 +84,12 @@ print(cats.shape)
 print(conts.shape)
 print(y.shape)
 
-
-
+# Set an embedding size
+# This will set embedding sizes for Hours, AMvsPM and Weekdays
+cat_szs = [len(df[col].cat.categories) for col in cat_cols]
+print(cat_szs)
+emb_szs = [(size, min(50, (size+1)//2)) for size in cat_szs]
+emb_szs
 
 
 
