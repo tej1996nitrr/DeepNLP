@@ -122,6 +122,72 @@ z = selfembdrop(z)
 print(z)
 
 
+class TabularModel(nn.Module):
+    def init(self, emb_szs, n_cont, out_sz, layers, p=0.5):
+        """:arg
+        emb_szs: list of tuples: each categorical variable size is paired with an embedding size
+        n_cont: int: number of continuous variables
+        out_sz: int: output sizees
+        layers: list of ints: layer size
+        p: float: dropout probability for each layer
+        """
+        super.__init__()
+        self.embeds = nn.ModuleList([nn.Embedding(ni, nf) for ni,nf in emb_szs]) #embeddings
+        self.emb_drop = nn.Dropout(p)  # dropuot
+        self.bn_cont = nn.BatchNorm1d(n_cont)  # normalization
+        layer_list = [] #storing the layers
+        n_emb = sum([nf for ni, nf in emb_szs]) # sum of total embeddings
+        n_in = n_emb + n_cont # number of inputs
+
+        # create identical layers with sequence of operations, e.g.
+        # layers = [100, 50, 25]
+        for i in layers:
+            layerlist.append(nn.Linear(n_in, i))
+            layerlist.append(nn.ReLU(inplace=True))
+            layerlist.append(nn.BatchNorm1d(i))
+            layerlist.append(nn.Dropout(p))
+            n_in = i
+        layerlist.append(nn.Linear(layers[-1], out_sz))  # final layer
+
+        # assign layers to atributes
+        self.layers = nn.Sequential(*layerlist)
+
+    def forward(self,x_cat, x_cont):
+        embeddings = []
+        for i, e in enumerate(self.embeds):
+            embeddings.append(e(x_cat[:, i]))
+        x = torch.cat(embeddings, 1)
+        x = self.emb_drop(x)  # categorical embeddings
+
+        x_cont = self.bn_cont(x_cont)  # continuous features
+        x = torch.cat([x, x_cont], 1)  # concatenate categorial and continuous features
+        x = self.layers(x)  # apply layers
+        return x
+
+
+layerlist = []  # storing the layers
+p = 0.5
+layers = [100, 50, 25]
+n_in = 200
+for i in layers:
+    layerlist.append(nn.Linear(n_in, i))
+    layerlist.append(nn.ReLU(inplace=True))
+    layerlist.append(nn.BatchNorm1d(i))
+    layerlist.append(nn.Dropout(p))
+    n_in = i
+
+print(layerlist)
+nn.Sequential(*layerlist)
+
+ni = 20
+nf = 10
+print(nn.Embedding(ni, nf))
+
+test_emb =nn.ModuleList([nn.Embedding(ni, nf) for ni,nf in emb_szs])
+print(test_emb)
+for i,e in enumerate(test_emb):
+    print(i,e)
+
 
 
 
