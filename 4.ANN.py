@@ -199,6 +199,16 @@ model
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
+batch_size = 60000 # two batches
+test_size = int(batch_size * .2)
+
+#data already shuffled
+cat_train = cats[:batch_size-test_size]
+cat_test = cats[batch_size-test_size:batch_size]
+con_train = conts[:batch_size-test_size]
+con_test = conts[batch_size-test_size:batch_size]
+y_train = y[:batch_size-test_size]
+y_test = y[batch_size-test_size:batch_size]
 
 
 
