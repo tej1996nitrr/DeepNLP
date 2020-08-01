@@ -4,7 +4,7 @@ import torch.nn as nn
 import numpy as np 
 import matplotlib.pyplot as plt 
 import pandas as pd 
-
+import time
 
 df = pd.read_csv('data/NYCTaxiFare.csv')
 print(df.head)
@@ -123,23 +123,16 @@ print(z)
 
 
 class TabularModel(nn.Module):
-    def __init__(self, emb_szs, n_cont, out_sz, layers, p=0.5):
-        """:arg
-        emb_szs: list of tuples: each categorical variable size is paired with an embedding size
-        n_cont: int: number of continuous variables
-        out_sz: int: output sizees
-        layers: list of ints: layer size
-        p: float: dropout probability for each layer
-        """
-        # super.__init__()
 
-        super(TabularModel, self).__init__()
-        self.embeds = nn.ModuleList([nn.Embedding(ni, nf) for ni,nf in emb_szs]) #embeddings
+    def __init__(self, emb_szs, n_cont, out_sz, layers, p=0.5):
+        super().__init__()
+        self.embeds = nn.ModuleList([nn.Embedding(ni, nf) for ni, nf in emb_szs])  # embeddings
         self.emb_drop = nn.Dropout(p)  # dropuot
         self.bn_cont = nn.BatchNorm1d(n_cont)  # normalization
-        layer_list = [] #storing the layers
-        n_emb = sum([nf for ni, nf in emb_szs]) # sum of total embeddings
-        n_in = n_emb + n_cont # number of inputs
+
+        layerlist = []  # storing the layers
+        n_emb = sum((nf for ni, nf in emb_szs))  # sum of total embeddings
+        n_in = n_emb + n_cont  # number of inputs
 
         # create identical layers with sequence of operations, e.g.
         # layers = [100, 50, 25]
@@ -154,7 +147,7 @@ class TabularModel(nn.Module):
         # assign layers to atributes
         self.layers = nn.Sequential(*layerlist)
 
-    def forward(self,x_cat, x_cont):
+    def forward(self, x_cat, x_cont):
         embeddings = []
         for i, e in enumerate(self.embeds):
             embeddings.append(e(x_cat[:, i]))
@@ -165,7 +158,6 @@ class TabularModel(nn.Module):
         x = torch.cat([x, x_cont], 1)  # concatenate categorial and continuous features
         x = self.layers(x)  # apply layers
         return x
-
 
 layerlist = []  # storing the layers
 p = 0.5
@@ -210,8 +202,31 @@ con_test = conts[batch_size-test_size:batch_size]
 y_train = y[:batch_size-test_size]
 y_test = y[batch_size-test_size:batch_size]
 
+len(cat_train)
+
+len(cat_test)
 
 
+start_time = time.time()
+epochs = 300
+losses = []
+
+for i in range(epochs):
+    i+=1
+    y_pred = model(cat_train, con_train)
+    loss = torch.sqrt(criterion(y_pred, y_train)) # RMSE
+    losses.append(loss)
+
+    # a neat trick to save screen space:
+    if i%25 == 1:
+        print(f'epoch: {i:3}  loss: {loss.item():10.8f}')
+
+    optimizer.zero_grad()   # reset gradients to 0
+    loss.backward()
+    optimizer.step()
+
+print(f'epoch: {i:3}  loss: {loss.item():10.8f}') # print the last line
+print(f'\nDuration: {time.time() - start_time:.0f} seconds') # print the time
 
 
 
