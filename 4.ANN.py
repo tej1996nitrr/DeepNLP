@@ -228,6 +228,15 @@ for i in range(epochs):
 print(f'epoch: {i:3}  loss: {loss.item():10.8f}') # print the last line
 print(f'\nDuration: {time.time() - start_time:.0f} seconds') # print the time
 
+# plt.plot(range(epochs), losses)
+# plt.ylabel('RMSE Loss')
+# plt.xlabel('epoch');
+
+#validate model
+with torch.no_grad():
+    y_val = model(cat_test, con_test)
+    loss = torch.sqrt(criterion(y_val, y_test))
+print(f'RMSE: {loss:.8f}')
 
 
 
