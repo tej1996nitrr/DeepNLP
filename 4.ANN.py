@@ -196,7 +196,8 @@ model = TabularModel(emb_szs, conts.shape[1], 1, [200,100], p=0.4)
 
 model
 
-
+criterion = nn.MSELoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 
 
