@@ -123,7 +123,7 @@ print(z)
 
 
 class TabularModel(nn.Module):
-    def init(self, emb_szs, n_cont, out_sz, layers, p=0.5):
+    def __init__(self, emb_szs, n_cont, out_sz, layers, p=0.5):
         """:arg
         emb_szs: list of tuples: each categorical variable size is paired with an embedding size
         n_cont: int: number of continuous variables
@@ -131,7 +131,9 @@ class TabularModel(nn.Module):
         layers: list of ints: layer size
         p: float: dropout probability for each layer
         """
-        super.__init__()
+        # super.__init__()
+
+        super(TabularModel, self).__init__()
         self.embeds = nn.ModuleList([nn.Embedding(ni, nf) for ni,nf in emb_szs]) #embeddings
         self.emb_drop = nn.Dropout(p)  # dropuot
         self.bn_cont = nn.BatchNorm1d(n_cont)  # normalization
@@ -189,8 +191,10 @@ for i,e in enumerate(test_emb):
     print(i,e)
 
 
+torch.manual_seed(33)
+model = TabularModel(emb_szs, conts.shape[1], 1, [200,100], p=0.4)
 
-
+model
 
 
 
