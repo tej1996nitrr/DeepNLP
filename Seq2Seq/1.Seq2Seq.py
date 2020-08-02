@@ -30,5 +30,4 @@ train_data, valid_data, test_data = Multi30k.splits(
     exts=(".de", ".en"), fields=(german, english)
 )
 
-
 # %%
