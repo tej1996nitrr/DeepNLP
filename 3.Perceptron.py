@@ -66,6 +66,52 @@ class Vocablulary(object):
             self._token_to_idx[token] = index
             self._idx_to_token[index] = token
         return index
-    
-    
+
+    def add_many(self, tokens):
+        """Add a list of tokens into the Vocabulary
+        
+        Args:
+            tokens (list): a list of string tokens
+        Returns:
+            indices (list): a list of indices corresponding to the tokens
+        """
+        return [self.add_token(token) for token in tokens]
+
+    def lookup_token(self, token):
+        """Retrieve the index associated with the token 
+          or the UNK index if token isn't present.
+        
+        Args:
+            token (str): the token to look up 
+        Returns:
+            index (int): the index corresponding to the token
+        Notes:
+            `unk_index` needs to be >=0 (having been added into the Vocabulary) 
+              for the UNK functionality 
+        """
+        if self.unk_index >= 0:
+            return self._token_to_idx.get(token, self.unk_index)
+        else:
+            return self._token_to_idx[token]
+            
+    def lookup_index(self, index):
+        """Return the token associated with the index
+        
+        Args: 
+            index (int): the index to look up
+        Returns:
+            token (str): the token corresponding to the index
+        Raises:
+            KeyError: if the index is not in the Vocabulary
+        """
+        if index not in self._idx_to_token:
+            raise KeyError("the index (%d) is not in the Vocabulary" % index)
+        return self._idx_to_token[index]
+
+    def __str__(self):
+        return "<Vocabulary(size=%d)>" % len(self)
+
+    def __len__(self):
+        return len(self._token_to_idx)
+
     
