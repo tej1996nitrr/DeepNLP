@@ -40,3 +40,32 @@ class Vocablulary(object):
         self.unk_index = -1
         if add_unk:
             self.unk_index = self.add_token(unk_token) 
+    
+    def to_serializer(self):
+        """ returns a dictionary that can be serialized """
+        return {'token_to_idx': self._token_to_idx, 
+                'add_unk': self._add_unk, 
+                'unk_token': self._unk_token}
+    
+    @classmethod
+    def from_serializer(cls, contents):
+        """ instantiates the Vocabulary from a serialized dictionary """
+        return cls(**contents)
+    
+    def add_token(self, token):
+        """Update mapping dicts based on the token.
+        Args:
+            token (str): the item to add into the Vocabulary
+        Returns:
+            index (int): the integer corresponding to the token
+        """
+        if token in self._token_to_idx:
+            index = self._token_to_idx[token]
+        else:
+            index = len(self._token_to_idx)
+            self._token_to_idx[token] = index
+            self._idx_to_token[index] = token
+        return index
+    
+    
+    
