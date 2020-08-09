@@ -29,5 +29,19 @@ english = Field(tokenize=tokenizer_eng, lower=True, init_token='<sos>', eos_toke
 train_data, valid_data, test_data = Multi30k.splits(
     exts=(".de", ".en"), fields=(german, english)
 )
+german.build_vocab(train_data, max_size=10000, min_freq=2)
+english.build_vocab(train_data, max_size=1000, min_freq=2)
 
 # %%
+class Encoder(nn.Module):
+    def __init__(self, input_size, embedding_size, hidden_size, num_layers, dropout):
+        super(Encoder, self).__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        self.dropout = nn.Dropout(dropout)
+        
+
+class Decoder(nn.Module):
+    pass
+class Seq2Seq(nn.Module):
+    pass
