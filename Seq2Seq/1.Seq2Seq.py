@@ -76,7 +76,10 @@ class Decoder(nn.Module):
         #embedding shape : ( 1, N, embedding_size)
         outputs,(hidden,cell) = self.rnn(embedding, (hidden, cell))
         #shape of outputs: (1,N, hidden_size)
-
+        predictions = self.fc(outputs)
+        #shape of predictions: (1,N, length_of_vocab)
+        predictions = predictions.squeeze(0)]
+        return predictions, hidden, cell
 
 class Seq2Seq(nn.Module):
     pass
