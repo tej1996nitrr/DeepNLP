@@ -78,7 +78,7 @@ class Decoder(nn.Module):
         #shape of outputs: (1,N, hidden_size)
         predictions = self.fc(outputs)
         #shape of predictions: (1,N, length_of_vocab)
-        predictions = predictions.squeeze(0)]
+        predictions = predictions.squeeze(0)
         return predictions, hidden, cell
 
 class Seq2Seq(nn.Module):
