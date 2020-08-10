@@ -57,8 +57,6 @@ class Encoder(nn.Module):
         outputs,(hidden, cell) = self.rnn(embedding)
         return hidden, cell
 
-
-
 class Decoder(nn.Module):
     def __init__(self, input_size, embedding_size, hidden_size, num_layers, p):
         super(Decoder, self).__init__()
@@ -82,4 +80,10 @@ class Decoder(nn.Module):
         return predictions, hidden, cell
 
 class Seq2Seq(nn.Module):
-    pass
+    def __init__(self, encoder, decoder):
+        super(Seq2Seq, self).__init__()
+        self.decoder = decoder
+        self.encoder = encoder
+
+    def forward(self, source, target, teacher_force_ratio=0.5):
+
