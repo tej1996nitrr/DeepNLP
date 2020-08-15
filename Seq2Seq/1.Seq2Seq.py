@@ -39,6 +39,7 @@ german.build_vocab(train_data, max_size=10000, min_freq=2)
 english.build_vocab(train_data, max_size=1000, min_freq=2)
 
 # %%
+cuda = torch.device('cuda') 
 
 class Encoder(nn.Module):
     def __init__(self, input_size, embedding_size, hidden_size, num_layers, p):
@@ -88,7 +89,7 @@ class Seq2Seq(nn.Module):
         batch_size =  source.shape[1]
         target_len = target.shape[0]
         target_vocab_size = len(english.vocab)
-        outputs = torch.zeros(target_len, batch_size, target_vocab_size).to(device)
+        outputs = torch.zeros(target_len, batch_size, target_vocab_size).to(device=cuda)
         hidden, cell = self.encoder(source)
         #grabbing start token
         x = target[0] 
@@ -103,6 +104,40 @@ class Seq2Seq(nn.Module):
 
         return outputs
 
-        
+#%%
+#TRAIING
 
+#training hyperparameters
+num_epochs = 20
+learning_rate = 0.001
+batch_size = 64
+
+#model hyperparameters
+load_model = False
+device = torch.device('cuda' if torch.cuda.is_available())
+input_size_encoder = len(german.vocab)
+input_size_decoder = len(english.vocab)
+output_size = len(english.vocab)
+encoder_embedding_size = 300
+decoder_embedding_size = 300
+hidden_size = 1024
+num_layers = 2
+encoder_dropout = 0.5
+decoder_dropout = 0.5
+
+#tensorboard
+writer = SummaryWriter(f'runs/loss_plot')
+step = 0
+
+train_iterator, valid_iterator, test_iterator = BucketIterator.splits((train_data,valid_data,test_data),
+                                                                        batch_size=batch_size,
+                                                                        sort_within_batch=True,
+                                                                        sort_key= lambda x:len(x.src),
+                                                                        device=device
+)
+encoder_net = Encoder(input_size_encoder, encoder_embedding_size, hidden_size, num_layers, encoder_dropout).to(device
+)
+decoder_net = Decoder(input_size_decoder, decoder_embedding_size, hidden_size, output_size, num_layers, decoder_dropout).to(device
+)
+model = Seq2Seq(encoder, decoder).to(device)
 
