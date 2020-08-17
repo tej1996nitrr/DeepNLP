@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/opt/anaconda3/envs/PyTorch/bin/python"
+    "python.pythonPath": "F:\\Anaconda3\\python.exe",
+    "python.linting.enabled": false
 }

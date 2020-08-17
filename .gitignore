@@ -1,0 +1,5 @@
+data/
+/.idea
+/.vscode
+/Seq2Seq/.data
+/.vscode/settings.json

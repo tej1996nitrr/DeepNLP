@@ -105,7 +105,7 @@ class Seq2Seq(nn.Module):
         return outputs
 
 #%%
-#TRAIING
+#TRAINING
 
 #training hyperparameters
 num_epochs = 20
