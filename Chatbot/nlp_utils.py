@@ -25,11 +25,9 @@ def bag_of_words(tokenized_sentence, all_words):
 
 if __name__ == "__main__":
     tokenized = tokenize("HMmm how you doing?")
-    # print(tokenized)
     stemmed = []
     for w in tokenized:
         stemmed.append(stemming(w))
-    # print(stemmed)
     sentence = ["Hello", "how", "are", "you"]
     words = ["hi", "hello", "I", "you", "bye", "thanks", "cool"]
     bag = bag_of_words(sentence, words)
