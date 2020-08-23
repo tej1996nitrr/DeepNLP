@@ -11,6 +11,7 @@ class EncoderCNN(nn.Module):
         super(EncoderCNN, self).__init__()
         self.train_cnn = train_cnn
         self.inception = models.inception_v3(pretrained=True, aux_logits=False)
+        self.inception.fc = nn.Linear(self.inception.fc.in_features, embed_size)
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(p=0.5)
 
@@ -38,3 +39,11 @@ class DecoderRNN(nn.Module):
         embedding = torch.cat((features.unsqueeze(0), embedding), dim=0)
         hiddens, _ = self.lstm(embedding)  # embedding= captions+ features from image
         outputs = self.linear(hiddens)
+        return outputs
+
+# class CNNtoRNN(nn.Module):
+#     def __init__(self, embed_size, hidden_size, vocab_size, num_layers):
+#         super(CNNtoRNN, self).__init__()
+#         self.encoderCNN = EncoderCNN(embed_size)
+#         self.decoderRNN = DecoderRNN(embed_size, hidden_size, vocab_size, num_layers)
+#
