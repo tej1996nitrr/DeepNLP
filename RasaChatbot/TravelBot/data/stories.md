@@ -152,5 +152,5 @@
   - utter_greet
 * find_itineraries
   - action_find_itineraries
-***** bye
-  -utter_goodbye
+* bye
+  - utter_goodbye

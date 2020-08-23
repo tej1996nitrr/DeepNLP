@@ -9,6 +9,9 @@ intents:
   - search_flights
   - search_trains
   - find_itineraries
+  - thanks
+  - bye
+  -
 
 entities:
   - source
