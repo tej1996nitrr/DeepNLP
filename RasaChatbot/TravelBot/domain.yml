@@ -11,7 +11,7 @@ intents:
   - find_itineraries
   - thanks
   - bye
-  -
+
 
 entities:
   - source
@@ -37,8 +37,9 @@ responses:
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
   utter_unclear:
-    -text: "Sorry, i am not able to understand"
-
+  - text: "Sorry, i am not able to understand"
+  utter_welcome:
+  - text: "Hey Welcome! How are you?"
 actions:
   - utter_greet
   - action_find_itineraries
