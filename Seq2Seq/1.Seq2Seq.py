@@ -1,9 +1,11 @@
-#%%
+# %%
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torchtext.datasets import Multi30k
 from torchtext.data import Field, BucketIterator
+import en_core_web_sm
+import de_core_news_sm
 import numpy as np
 import spacy
 import random
@@ -12,16 +14,17 @@ import random
 from torchtext.data.metrics import bleu_score
 import sys
 
-
 spacy_eng = en_core_web_sm.load()
 spacy_ger = de_core_news_sm.load()
+
+
 def translate_sentence(model, sentence, german, english, device, max_length=50):
-    # print(sentence)
+    print(sentence)
 
     # sys.exit()
 
     # Load german tokenizer
-    spacy_ger =de_core_news_sm.load()
+    spacy_ger = de_core_news_sm.load()
 
     # Create tokens using spacy and everything in lower case (which is what our vocab is)
     if type(sentence) == str:
@@ -93,6 +96,8 @@ def load_checkpoint(checkpoint, model, optimizer):
     print("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
     optimizer.load_state_dict(checkpoint["optimizer"])
+
+
 def tokenize_ger(text):
     return [tok.text for tok in spacy_ger.tokenizer(text)]
 
@@ -139,7 +144,7 @@ class Encoder(nn.Module):
 
 class Decoder(nn.Module):
     def __init__(
-        self, input_size, embedding_size, hidden_size, output_size, num_layers, p
+            self, input_size, embedding_size, hidden_size, output_size, num_layers, p
     ):
         super(Decoder, self).__init__()
         self.dropout = nn.Dropout(p)
@@ -210,8 +215,6 @@ class Seq2Seq(nn.Module):
         return outputs
 
 
-### We're ready to define everything we need for training our Seq2Seq model ###
-
 # Training hyperparameters
 num_epochs = 100
 learning_rate = 0.001
@@ -230,7 +233,6 @@ num_layers = 2
 enc_dropout = 0.5
 dec_dropout = 0.5
 
-# Tensorboard to get nice loss plot
 # writer = SummaryWriter(f"runs/loss_plot")
 step = 0
 
@@ -263,7 +265,6 @@ criterion = nn.CrossEntropyLoss(ignore_index=pad_idx)
 
 if load_model:
     load_checkpoint(torch.load("my_checkpoint.pth.tar"), model, optimizer)
-
 
 sentence = "ein boot mit mehreren männern darauf wird von einem großen pferdegespann ans ufer gezogen."
 
@@ -317,10 +318,7 @@ for epoch in range(num_epochs):
         # writer.add_scalar("Training loss", loss, global_step=step)
         step += 1
 
-
 score = bleu(test_data[1:100], model, german, english, device)
-print(f"Bleu score {score*100:.2f}")
-
-
+print(f"Bleu score {score * 100:.2f}")
 
 # %%
