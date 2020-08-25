@@ -1,3 +1,4 @@
+#%%
 import os
 import pandas as pd
 import spacy
@@ -6,12 +7,16 @@ import torch.nn as nn
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
-
+import en_core_web_sm
+import torchvision.transforms as transforms
 
 # We want  to convert text -> numerical values
 # 1. We need to setup a pytorch datset to load the data
 # 2. We need a vocabulary mapping each word to index
 # 3. Setup padding of every_batch (all examples  should be of same seq_length)
+spacy_eng = en_core_web_sm.load()
+
+
 class Vocabulary:
     def __init__(self, freq_threshold):
         self.itos = {0: "<PAD>", 1: "<SOS>", 2: "<EOS>", 3: "<UNK>"}
@@ -31,7 +36,7 @@ class Vocabulary:
         for sentence in sentence_list:
             for word in self.tokenize_eng(sentence):
                 if word not in frequencies:
-                    frequenies[word] = 1
+                    frequencies[word] = 1
                 else:
                     frequencies[word] += 1
                 if frequencies[word] == self.freq_threshold:
@@ -55,7 +60,7 @@ class FlickerDataset(Dataset):
 
         # get img, caption columns
         self.imgs = self.df['image']
-        self.captions = self.df['captions']
+        self.captions = self.df['caption']
 
         # initialize vocabulary
         self.vocab = Vocabulary(freq_threshold)
@@ -96,6 +101,24 @@ def get_loader(root_folder, annotation_file, transform, batch_size=32, num_worke
     return loader
 
 
-data_loader = get_loader(r'F:\VSCode\DeepNLP\ImageCaptioning\flicker8k',
-                         annotation_file=r'F:\VSCode\DeepNLP\ImageCaptioning\flicker8k\captions.txt', transform=None,
-                         shuffle=True)
+def main():
+    transform = transforms.Compose(
+        [
+        transforms.Resize((224,224)),
+        transforms.ToTensor()
+        ]
+    )
+    loader, dataset= get_loader(r'F:\VSCode\DeepNLP\ImageCaptioning\flickr8k',
+                             annotation_file=r'F:\VSCode\DeepNLP\ImageCaptioning\flickr8k\captions.txt',
+                             transform=transform,
+                             shuffle=True)
+
+    for idx, (imgs, captions) in enumerate(loader):
+        print(imgs.shape)
+        print(captions.shape)
+
+
+if __name__ == "__main__":
+    main()
+
+# %%
