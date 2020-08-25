@@ -6,7 +6,7 @@ import torch.nn as nn
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
-
+import torchvision.transforms as transforms
 
 # We want  to convert text -> numerical values
 # 1. We need to setup a pytorch datset to load the data
@@ -99,3 +99,24 @@ def get_loader(root_folder, annotation_file, transform, batch_size=32, num_worke
 data_loader = get_loader(r'F:\VSCode\DeepNLP\ImageCaptioning\flicker8k',
                          annotation_file=r'F:\VSCode\DeepNLP\ImageCaptioning\flicker8k\captions.txt', transform=None,
                          shuffle=True)
+
+def main():
+    transform = transforms.Compose(
+        [
+        transforms.Resize((224,224)),
+        transforms.ToTensor()
+        ]
+    )
+    loader, dataset= get_loader(r'F:\VSCode\DeepNLP\ImageCaptioning\flickr8k',
+                             annotation_file=r'F:\VSCode\DeepNLP\ImageCaptioning\flickr8k\captions.txt',
+                             transform=transform,
+                             shuffle=True)
+
+    for idx, (imgs, captions) in enumerate(loader):
+        print(imgs.shape)
+        print(captions.shape)
+
+
+if __name__ == "__main__":
+    main()
+
