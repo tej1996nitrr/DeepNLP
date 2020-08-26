@@ -7,12 +7,8 @@ import torch.nn as nn
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
-<<<<<<< HEAD
-import en_core_web_sm
-=======
->>>>>>> 7fccfe81f77cabe8194cb8b98b5aa075c5d06b04
 import torchvision.transforms as transforms
-
+import en_core_web_sm
 # We want  to convert text -> numerical values
 # 1. We need to setup a pytorch datset to load the data
 # 2. We need a vocabulary mapping each word to index
@@ -104,9 +100,9 @@ def get_loader(root_folder, annotation_file, transform, batch_size=32, num_worke
     return loader
 
 
-data_loader = get_loader(r'F:\VSCode\DeepNLP\ImageCaptioning\flicker8k',
-                         annotation_file=r'F:\VSCode\DeepNLP\ImageCaptioning\flicker8k\captions.txt', transform=None,
-                         shuffle=True)
+# data_loader = get_loader(r'F:\VSCode\DeepNLP\ImageCaptioning\flicker8k',
+#                          annotation_file=r'F:\VSCode\DeepNLP\ImageCaptioning\flicker8k\captions.txt', transform=None,
+#                          shuffle=True)
 
 def main():
     transform = transforms.Compose(
@@ -128,3 +124,5 @@ def main():
 if __name__ == "__main__":
     main()
 
+
+# %%
