@@ -1,4 +1,4 @@
-import download
+from .download import maybe_download_and_extract as M
 import os
 import glob
 
@@ -26,7 +26,7 @@ def maybe_download_and_extract():
     in data_dir (set this variable first to the desired directory).
     """
 
-    download.maybe_download_and_extract(url=data_url, download_dir=data_dir)
+    M(url=data_url, download_dir=data_dir)
 
 def load_data(train=True):
     """

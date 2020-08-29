@@ -4,7 +4,7 @@ import urllib.request
 import tarfile
 import zipfile
 
-def _print_dowmload_progress(count, block_size, total_size):
+def _print_download_progress(count, block_size, total_size):
     """
     Function used for printing the download progress.
     Used as a call-back function in maybe_download_and_extract().
