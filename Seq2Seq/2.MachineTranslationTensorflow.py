@@ -33,5 +33,13 @@ num_words = 10000
 tokenizer = Tokenizer(num_words=num_words)  
 tokenizer.fit_on_texts(data_set)
 # %%
-print(tokenizer.word_index)
+print(len(tokenizer.word_index))
+# %%
+x_train_tokens = tokenizer.texts_to_sequences(x_train_text)
+# %%
+print(x_train_text[1])
+# %%
+print(np.array(x_train_tokens[1]))
+# %%
+x_test_tokens = tokenizer.texts_to_sequences(x_test_text)
 # %%
