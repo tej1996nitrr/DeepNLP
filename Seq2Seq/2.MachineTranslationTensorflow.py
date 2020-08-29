@@ -89,3 +89,23 @@ def tokens_to_string(tokens):
 print("Example for reverse mapping", x_train_text[1],".......recreated this text......",
        tokens_to_string(x_train_tokens[1]))
 # %%
+'''Creating Model'''
+model = Sequential()
+embedding_size = 8
+model.add(Embedding(input_dim=num_words,
+                    output_dim=embedding_size,
+                    input_length=max_tokens,
+                    name='layer_embedding'))
+
+# Because we will add a second GRU after this one, we need to return sequences of data because the next GRU expects sequences as its input
+model.add(GRU(units=16, return_sequences=True))
+#  second GRU with 8 output units
+model.add(GRU(units=8, return_sequences=True))
+model.add(GRU(units=4))
+# fully-connected / dense layer which computes a value between 0.0 and 1.0 that will be used as the classification output.
+model.add(Dense(1, activation='sigmoid'))
+optimizer = Adam(lr=1e-3)
+model.compile(loss='binary_crossentropy',
+              optimizer=optimizer,
+              metrics=['accuracy'])
+model.summary() 
