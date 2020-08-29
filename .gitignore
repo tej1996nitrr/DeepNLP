@@ -6,3 +6,6 @@
 /Basics/data
 /Chatbot/.idea
 Seq2Seq/data
+Seq2Seq/utils/__pycache__
+Seq2Seq/my_checkpoint.pth.tar
+Seq2Seq/__pycache__
