@@ -22,6 +22,16 @@ print("Train-set Size: ", len(x_train_text))
 print("Test-set Size: ", len(x_test_text))
 data_set = x_test_text + x_train_text
 # %%
-x_train_text[1]
-y_train[1]
+print(x_train_text[1])
+print(y_train[1])
+y_train = np.array(y_train)
+y_test = np.array(y_test)
+# %%
+'''Tokenizer'''
+# tokenizer to only use the 10000 most popular words from the data-set.
+num_words = 10000
+tokenizer = Tokenizer(num_words=num_words)  
+tokenizer.fit_on_texts(data_set)
+# %%
+print(tokenizer.word_index)
 # %%
