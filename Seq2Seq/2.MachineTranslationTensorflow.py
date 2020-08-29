@@ -74,3 +74,18 @@ print(x_train_pad.shape)
 print(x_test_pad.shape)
 print("Example", np.array(x_train_tokens[1]), x_train_pad[1])
 # %%
+'''Inverse Mapping'''
+idx = tokenizer.word_index
+inverse_map = dict(zip(idx.values(), idx.keys()))
+def tokens_to_string(tokens):
+    # Map from tokens back to words.
+    words = [inverse_map[token] for token in tokens if token != 0]
+    
+    # Concatenate all words.
+    text = " ".join(words)
+
+    return text
+    
+print("Example for reverse mapping", x_train_text[1],".......recreated this text......",
+       tokens_to_string(x_train_tokens[1]))
+# %%
