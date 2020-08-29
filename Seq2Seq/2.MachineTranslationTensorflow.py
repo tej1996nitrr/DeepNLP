@@ -64,3 +64,13 @@ print(max_tokens)
 # This covers about 95% of the data-set.
 np.sum(num_tokens < max_tokens) / len(num_tokens)
 # %%
+# padding or truncating the sequences
+pad = 'pre' # adding zeros first, if pad='post, zeros are added at the end
+x_train_pad = pad_sequences(x_train_tokens, maxlen=max_tokens,
+                            padding=pad, truncating=pad)
+x_test_pad = pad_sequences(x_test_tokens, maxlen=max_tokens,
+                           padding=pad, truncating=pad)
+print(x_train_pad.shape)
+print(x_test_pad.shape)
+print("Example", np.array(x_train_tokens[1]), x_train_pad[1])
+# %%
