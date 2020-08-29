@@ -43,3 +43,24 @@ print(np.array(x_train_tokens[1]))
 # %%
 x_test_tokens = tokenizer.texts_to_sequences(x_test_text)
 # %%
+'''Padding and Truncating data'''
+# we here make a compromise  and use sequence-length that covers most of the data
+# and we will then truncate longer sequences and pad shorter sequences.
+num_tokens = [len(tokens) for tokens in x_train_tokens + x_test_tokens]
+num_tokens = np.array(num_tokens)
+# average number of tokens in a sequence 
+print("average number of tokens in a sequence ", np.mean(num_tokens))
+# %%
+# max  number of tokens
+print(np.max(num_tokens))
+
+# %%
+# the max number of tokens we will allow is set to the average plus 2 standard deviations.
+max_tokens = np.mean(num_tokens) + 2 * np.std(num_tokens)
+max_tokens = int(max_tokens)
+print(max_tokens)
+
+# %%
+# This covers about 95% of the data-set.
+np.sum(num_tokens < max_tokens) / len(num_tokens)
+# %%
