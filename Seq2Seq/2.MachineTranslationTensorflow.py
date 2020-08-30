@@ -13,6 +13,8 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+
+
 # utils.imdbdataset.maybe_download_and_extract()
 # %%
 x_train_text, y_train = utils.imdbdataset.load_data(train=True)
