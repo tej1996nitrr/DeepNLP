@@ -109,3 +109,7 @@ model.compile(loss='binary_crossentropy',
               optimizer=optimizer,
               metrics=['accuracy'])
 model.summary() 
+'''Training RNN'''
+model.fit(x_train_pad, y_train,
+          validation_split=0.05, epochs=3, batch_size=64)
+# %%
