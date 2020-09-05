@@ -126,3 +126,18 @@ if __name__ == "__main__":
 
 
 # %%
+'''consider only those words which occur at least 10 times. This helps the model become more robust to outliers and make less mistakes.'''
+all_train_captions = []
+for key, val in descriptions.items():
+    for cap in val:
+        all_train_captions.append(cap)
+word_count_threshold = 10
+word_counts = {}
+nsents=0
+for sent in all_train_captions:
+    nsents += 1
+    for w in sent.split(' '):
+        word_counts[w] = word_counts.get(w, 0) + 1
+        
+vocab = [w for w in word_counts if word_counts[w] >= word_count_threshold]
+print('preprocessed words %d ' % len(vocab))
