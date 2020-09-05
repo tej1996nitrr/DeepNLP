@@ -12,7 +12,6 @@ def load_checkpoint(checkpoint, model, optimizer):
     optimizer.load_state_dict(checkpoint["optimizer"])
     step = checkpoint["step"]
     return step
-    
 def print_examples(model, device, dataset):
     transform = transforms.Compose(
         [
